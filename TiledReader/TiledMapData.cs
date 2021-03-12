@@ -24,6 +24,14 @@ namespace TiledReader
             TileSets = new List<TileSetData>();
             TileLayers = new List<TileLayerData>();
         }
+
+        /// <summary>
+        /// Sets end ids for tilesets
+        /// </summary>
+        public void UpdateTileSetIds()
+        {
+
+        }
     }
 
     public class TileSetData
@@ -109,7 +117,7 @@ namespace TiledReader
                             GZipDecompression();
                             break;
                         case "":
-                            StandardBase64Decompression();
+                            StandardBase64();
                             break;
                     }
                     break;
@@ -121,13 +129,9 @@ namespace TiledReader
 
         private void CSVDecompression()
         {
-            var splitData = Array.ConvertAll(RawTileData.Split(','), s => int.Parse(s));
-            Tiles = new int[TilesHigh][];
+            int[] splitData = Array.ConvertAll(RawTileData.Split(','), s => int.Parse(s));
 
-            for (int i = 0; i < TilesHigh; i++)
-            {
-                Tiles[i] = splitData.Skip(i * TilesWide).Take(TilesWide).ToArray(); 
-            }
+            GetTileDataFromRaw(splitData);
         }
         private void ZStandardDecompression()
         {
@@ -137,9 +141,14 @@ namespace TiledReader
         {
 
         }
-        private void StandardBase64Decompression()
+        private void StandardBase64()
         {
+            var data = Convert.FromBase64String(RawTileData);
+            int tileCount = TilesWide * TilesHigh;
+            int[] tmp = new int[tileCount];
+            Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
 
+            GetTileDataFromRaw(tmp);
         }
         private void GZipDecompression()
         {
@@ -148,6 +157,16 @@ namespace TiledReader
         private void XMLDecompression()
         {
 
+        }
+
+        private void GetTileDataFromRaw(int[] raw)
+        {
+            Tiles = new int[TilesHigh][];
+
+            for (int i = 0; i < TilesHigh; i++)
+            {
+                Tiles[i] = raw.Skip(i * TilesWide).Take(TilesWide).ToArray();
+            }
         }
     }
 }
