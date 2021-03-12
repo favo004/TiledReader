@@ -4,10 +4,10 @@
 ## Todo:
 
 - [x] CSV encoding decompression
-- []  Base64 decompression
-- []  Zlib decompression
-- []  Zstd decompression
-- []  Gzip decompression
+- [ ]  Base64 decompression
+- [ ]  Zlib decompression
+- [ ]  Zstd decompression
+- [ ]  Gzip decompression
 - [x] Orthoginal parsing
-- []  Isometric parsing
-- []  Hexagonal parsing
+- [ ]  Isometric parsing
+- [ ]  Hexagonal parsing
