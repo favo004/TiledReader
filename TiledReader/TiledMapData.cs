@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ZstdNet;
 
 namespace TiledReader
 {
@@ -85,10 +86,6 @@ namespace TiledReader
         {
 
         }
-        public TileLayerData(int id, string name, int tilesWide, int tilesHigh)
-        {
-
-        }
 
         /// <summary>
         /// Loads in data and decompresses based on compression code
@@ -97,6 +94,8 @@ namespace TiledReader
         /// <param name="compression"></param>
         public void LoadInTiles()
         {
+            if (Tiles != null) return;
+
             RawTileData = RawTileData.Replace("\n", "").Trim();
 
             switch (Encoding)
@@ -135,7 +134,14 @@ namespace TiledReader
         }
         private void ZStandardDecompression()
         {
-            
+            var data = Convert.FromBase64String(RawTileData);
+            using (var decompressor = new Decompressor())
+            {
+                var decompressedData = decompressor.Unwrap(data);
+                ConvertRawDataFromByteArray(decompressedData);
+            }
+
+
         }
         private void ZLibDecompression()
         {
@@ -143,12 +149,8 @@ namespace TiledReader
         }
         private void StandardBase64()
         {
-            var data = Convert.FromBase64String(RawTileData);
-            int tileCount = TilesWide * TilesHigh;
-            int[] tmp = new int[tileCount];
-            Buffer.BlockCopy(data, 0, tmp, 0, tmp.Length);
-
-            GetTileDataFromRaw(tmp);
+            byte[] data = Convert.FromBase64String(RawTileData);
+            ConvertRawDataFromByteArray(data);
         }
         private void GZipDecompression()
         {
@@ -159,6 +161,18 @@ namespace TiledReader
 
         }
 
+        private void ConvertRawDataFromByteArray(byte[] data)
+        {
+            int tileCount = TilesWide * TilesHigh;
+            int[] tmp = new int[tileCount];
+
+            for (int i = 0; i < tileCount; i++)
+            {
+                tmp[i] = BitConverter.ToInt32(data, i * 4);
+            }
+
+            GetTileDataFromRaw(tmp);
+        }
         private void GetTileDataFromRaw(int[] raw)
         {
             Tiles = new int[TilesHigh][];
