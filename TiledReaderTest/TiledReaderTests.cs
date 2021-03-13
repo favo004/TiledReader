@@ -1,4 +1,3 @@
-using System;
 using TiledReader;
 using Xunit;
 
@@ -9,15 +8,23 @@ namespace TiledReaderTest
         [Fact]
         public void TiledReaderCSVFile()
         {
-            string testFilePath = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\CSVTestMap.tmx";
+            string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\CSVTestMap.tmx";
 
-            var data = TiledMapReader.GenerateMap(testFilePath);
+            var data = TiledMapReader.GenerateMap(path);
         }
 
         [Fact]
         public void TiledReaderBase64File()
         {
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\Base64TestMap.tmx";
+
+            var data = TiledMapReader.GenerateMap(path);
+        }
+
+        [Fact]
+        public void TiledReaderZstdFile()
+        {
+            string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\ZstdTestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
         }
