@@ -28,5 +28,21 @@ namespace TiledReaderTest
 
             var data = TiledMapReader.GenerateMap(path);
         }
+
+        [Fact]
+        public void TiledReaderZlibFile()
+        {
+            string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\ZlibTestMap.tmx";
+
+            var data = TiledMapReader.GenerateMap(path);
+        }
+
+        [Fact]
+        public void TiledReaderGZipFile()
+        {
+            string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\GZipTestMap.tmx";
+
+            var data = TiledMapReader.GenerateMap(path);
+        }
     }
 }
