@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="10" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" source="DungeonV2.tsx"/>
+ <tileset firstgid="101" source="MapFeatureIcons.tsx"/>
+ <layer id="1" name="Floor" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eAHTZGBg0BzFo2FA5TQAAFsQGAc=
+  </data>
+ </layer>
+ <layer id="2" name="Walls" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eAHjYWBg4CESKwDV4cMwc4DK8ILBpA6bW+ghJg8MIUW0UMJmL5oSMHeg1cHsx0cDADg/A7E=
+  </data>
+ </layer>
+ <layer id="3" name="Foreground" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eAFjYWBgECOAWYHyvEBMCHADFQwWdRJAt0ihORib+6gtJgq0U5wIe9GUgLnY3DLY1PEBHcREAPMD5QHQrQKt
+  </data>
+ </layer>
+ <layer id="4" name="Iteractables" width="10" height="15">
+  <data encoding="base64" compression="zlib">
+   eAFjYCAdpCJpQWbDhNNhDDQ6DcrHpgdNKZxLilq4JgoZpNhJilpinQULJ1zqSbGTFLW47AOJY3MTstnIbJB6AH96BYw=
+  </data>
+ </layer>
+</map>

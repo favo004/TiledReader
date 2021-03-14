@@ -1,7 +1,10 @@
-﻿using System;
+﻿using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using ZstdNet;
 
 namespace TiledReader
 {
@@ -23,6 +26,14 @@ namespace TiledReader
         {
             TileSets = new List<TileSetData>();
             TileLayers = new List<TileLayerData>();
+        }
+
+        /// <summary>
+        /// Sets end ids for tilesets
+        /// </summary>
+        public void UpdateTileSetIds()
+        {
+
         }
     }
 
@@ -77,10 +88,6 @@ namespace TiledReader
         {
 
         }
-        public TileLayerData(int id, string name, int tilesWide, int tilesHigh)
-        {
-
-        }
 
         /// <summary>
         /// Loads in data and decompresses based on compression code
@@ -89,6 +96,8 @@ namespace TiledReader
         /// <param name="compression"></param>
         public void LoadInTiles()
         {
+            if (Tiles != null) return;
+
             RawTileData = RawTileData.Replace("\n", "").Trim();
 
             switch (Encoding)
@@ -109,7 +118,7 @@ namespace TiledReader
                             GZipDecompression();
                             break;
                         case "":
-                            StandardBase64Decompression();
+                            StandardBase64();
                             break;
                     }
                     break;
@@ -121,33 +130,79 @@ namespace TiledReader
 
         private void CSVDecompression()
         {
-            var splitData = Array.ConvertAll(RawTileData.Split(','), s => int.Parse(s));
-            Tiles = new int[TilesHigh][];
+            int[] splitData = Array.ConvertAll(RawTileData.Split(','), s => int.Parse(s));
 
-            for (int i = 0; i < TilesHigh; i++)
-            {
-                Tiles[i] = splitData.Skip(i * TilesWide).Take(TilesWide).ToArray(); 
-            }
+            GetTileDataFromRaw(splitData);
         }
         private void ZStandardDecompression()
         {
-            
+            var data = Convert.FromBase64String(RawTileData);
+            using (var decompressor = new Decompressor())
+            {
+                var decompressedData = decompressor.Unwrap(data);
+                ConvertRawDataFromByteArray(decompressedData);
+            }
+
+
         }
         private void ZLibDecompression()
         {
+            byte[] data = Convert.FromBase64String(RawTileData);
+            var outputStream = new MemoryStream();
 
+            using(var compressedStream = new MemoryStream(data))
+            using(var inputStream = new InflaterInputStream(compressedStream))
+            {
+                inputStream.CopyTo(outputStream);
+                ConvertRawDataFromByteArray(outputStream.ToArray());
+            }
+
+            outputStream.Dispose();
         }
-        private void StandardBase64Decompression()
+        private void StandardBase64()
         {
-
+            byte[] data = Convert.FromBase64String(RawTileData);
+            ConvertRawDataFromByteArray(data);
         }
         private void GZipDecompression()
         {
+            byte[] data = Convert.FromBase64String(RawTileData);
+            var outputStream = new MemoryStream();
 
+            using (var compressedStream = new MemoryStream(data))
+            using (var inputStream = new GZipInputStream(compressedStream))
+            {
+                inputStream.CopyTo(outputStream);
+                ConvertRawDataFromByteArray(outputStream.ToArray());
+            }
+
+            outputStream.Dispose();
         }
         private void XMLDecompression()
         {
 
+        }
+
+        private void ConvertRawDataFromByteArray(byte[] data)
+        {
+            int tileCount = TilesWide * TilesHigh;
+            int[] tmp = new int[tileCount];
+
+            for (int i = 0; i < tileCount; i++)
+            {
+                tmp[i] = BitConverter.ToInt32(data, i * 4);
+            }
+
+            GetTileDataFromRaw(tmp);
+        }
+        private void GetTileDataFromRaw(int[] raw)
+        {
+            Tiles = new int[TilesHigh][];
+
+            for (int i = 0; i < TilesHigh; i++)
+            {
+                Tiles[i] = raw.Skip(i * TilesWide).Take(TilesWide).ToArray();
+            }
         }
     }
 }
