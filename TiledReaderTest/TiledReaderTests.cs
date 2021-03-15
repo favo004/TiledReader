@@ -11,6 +11,10 @@ namespace TiledReaderTest
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\CSVTestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
+
+            Assert.NotNull(data);
+            Assert.Equal(2, data.TileSets.Count);
+            Assert.Equal(4, data.TileLayers.Count);
         }
 
         [Fact]
@@ -19,6 +23,10 @@ namespace TiledReaderTest
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\Base64TestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
+
+            Assert.NotNull(data);
+            Assert.Equal(2, data.TileSets.Count);
+            Assert.Equal(4, data.TileLayers.Count);
         }
 
         [Fact]
@@ -27,6 +35,10 @@ namespace TiledReaderTest
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\ZstdTestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
+
+            Assert.NotNull(data);
+            Assert.Equal(2, data.TileSets.Count);
+            Assert.Equal(4, data.TileLayers.Count);
         }
 
         [Fact]
@@ -35,6 +47,10 @@ namespace TiledReaderTest
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\ZlibTestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
+
+            Assert.NotNull(data);
+            Assert.Equal(2, data.TileSets.Count);
+            Assert.Equal(4, data.TileLayers.Count);
         }
 
         [Fact]
@@ -43,6 +59,10 @@ namespace TiledReaderTest
             string path = @"C:\Users\JFavo\source\repos\TiledReader\TiledReaderTest\TestData\GZipTestMap.tmx";
 
             var data = TiledMapReader.GenerateMap(path);
+
+            Assert.NotNull(data);
+            Assert.Equal(2, data.TileSets.Count);
+            Assert.Equal(4, data.TileLayers.Count);
         }
     }
 }
