@@ -59,6 +59,7 @@ namespace TiledReader
                         {
                             layer.LoadInTiles();
                         }
+                        mapData.UpdateTileSetIds();
 
                     }
                     catch (Exception e)

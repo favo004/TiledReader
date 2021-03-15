@@ -33,7 +33,18 @@ namespace TiledReader
         /// </summary>
         public void UpdateTileSetIds()
         {
-
+            for (int i = 0; i < TileSets.Count; i++)
+            {
+                if(i == TileSets.Count - 1)
+                {
+                    // Last element
+                    TileSets[i].EndId = int.MaxValue;
+                }
+                else
+                {
+                    TileSets[i].EndId = TileSets[i + 1].StartId - 1;
+                }
+            }
         }
     }
 
@@ -180,7 +191,7 @@ namespace TiledReader
         }
         private void XMLDecompression()
         {
-
+            // TODO
         }
 
         private void ConvertRawDataFromByteArray(byte[] data)
